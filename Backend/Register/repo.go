@@ -42,5 +42,5 @@ func (r *Users) UpdateUser(ctx context.Context, user models.User) error {
 }
 
 func (r *Users) DeleteUser(ctx context.Context, userId int) error {
-	return r.DeleteUser(ctx, userId)
+	return r.db.DeleteUser(ctx, userId)
 }
