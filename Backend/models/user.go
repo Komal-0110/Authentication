@@ -1,4 +1,4 @@
-package Register
+package models
 
 import "time"
 

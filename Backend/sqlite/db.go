@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/Komal-0110/User-Authentication-Service/Register"
+	models "github.com/Komal-0110/User-Authentication-Service/models"
 	"github.com/uptrace/bun"
 )
 
@@ -21,7 +21,7 @@ func NewDB(db *bun.DB) *DB {
 	}
 }
 
-func (d *DB) AddUser(ctx context.Context, user Register.User) error {
+func (d *DB) AddUser(ctx context.Context, user models.User) error {
 	if err := d.db.
 		NewInsert().
 		Model(&user).
@@ -32,8 +32,8 @@ func (d *DB) AddUser(ctx context.Context, user Register.User) error {
 	return nil
 }
 
-func (d *DB) GetUsers(ctx context.Context) ([]Register.User, error) {
-	var users []Register.User
+func (d *DB) GetUsers(ctx context.Context) ([]models.User, error) {
+	var users []models.User
 	if err := d.db.
 		NewSelect().
 		Model(&users).
@@ -47,23 +47,23 @@ func (d *DB) GetUsers(ctx context.Context) ([]Register.User, error) {
 	return users, nil
 }
 
-func (d *DB) GetUser(ctx context.Context, userId int) (Register.User, error) {
-	var user Register.User
+func (d *DB) GetUser(ctx context.Context, userId int) (models.User, error) {
+	var user models.User
 	if err := d.db.
 		NewSelect().
 		Model(&user).
 		Where("Id = ?", userId).
 		Scan(ctx); err != nil {
 		if err == sql.ErrNoRows {
-			return Register.User{}, ErrNotFound
+			return models.User{}, ErrNotFound
 		}
-		return Register.User{}, err
+		return models.User{}, err
 	}
 
 	return user, nil
 }
 
-func (d *DB) UpdateUser(ctx context.Context, user Register.User) error {
+func (d *DB) UpdateUser(ctx context.Context, user models.User) error {
 	if err := d.db.
 		NewUpdate().
 		Model(&user).
@@ -79,7 +79,7 @@ func (d *DB) UpdateUser(ctx context.Context, user Register.User) error {
 }
 
 func (d *DB) DeleteUser(ctx context.Context, userId int) error {
-	var user Register.User
+	var user models.User
 	if err := d.db.NewDelete().Model(&user).Where("id = ?", userId).Scan(ctx); err != nil {
 		if err == sql.ErrNoRows {
 			return ErrNotFound
