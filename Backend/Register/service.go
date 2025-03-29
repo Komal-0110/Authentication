@@ -10,14 +10,20 @@ type Service struct {
 	repo UserRepo
 }
 
+type UserReq struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 func NewService(repo UserRepo) *Service {
 	return &Service{
 		repo: repo,
 	}
 }
 
-func (s *Service) AddUser(ctx context.Context, user models.User) error {
-	if err := s.repo.AddUser(ctx, &user); err != nil {
+func (s *Service) AddUser(ctx context.Context, user UserReq) error {
+	if err := s.repo.AddUser(ctx, &models.User{}); err != nil {
 		return err
 	}
 
