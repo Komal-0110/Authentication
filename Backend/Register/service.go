@@ -10,19 +10,13 @@ type Service struct {
 	repo UserRepo
 }
 
-type UserReq struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 func NewService(repo UserRepo) *Service {
 	return &Service{
 		repo: repo,
 	}
 }
 
-func (s *Service) AddUser(ctx context.Context, user UserReq) error {
+func (s *Service) AddUser(ctx context.Context, user models.UserReq) error {
 	if err := s.repo.AddUser(ctx, &models.User{}); err != nil {
 		return err
 	}
@@ -30,22 +24,39 @@ func (s *Service) AddUser(ctx context.Context, user UserReq) error {
 	return nil
 }
 
-func (s *Service) GetUsers(ctx context.Context) ([]models.User, error) {
+func (s *Service) GetUsers(ctx context.Context) ([]models.UserRes, error) {
 	users, err := s.repo.GetUsers(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return users, nil
-}
-
-func (s *Service) GetUserById(ctx context.Context, userId int) (models.User, error) {
-	user, err := s.repo.GetUserById(ctx, userId)
-	if err != nil {
-		return models.User{}, err
+	userRes := make([]models.UserRes, 0)
+	for _, user := range users {
+		userRes = append(userRes, models.UserRes{
+			Username:      user.Username,
+			Email:         user.Email,
+			Role:          user.Role,
+			AccountStatus: user.AccountStatus,
+		})
 	}
 
-	return user, nil
+	return userRes, nil
+}
+
+func (s *Service) GetUserById(ctx context.Context, userId int) (models.UserRes, error) {
+	user, err := s.repo.GetUserById(ctx, userId)
+	if err != nil {
+		return models.UserRes{}, err
+	}
+
+	userRes := models.UserRes{
+		Username:      user.Username,
+		Email:         user.Email,
+		Role:          user.Role,
+		AccountStatus: user.AccountStatus,
+	}
+
+	return userRes, nil
 }
 
 func (s *Service) UpdateUser(ctx context.Context, user models.User) error {

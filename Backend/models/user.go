@@ -41,3 +41,16 @@ type User struct {
 	CreatedAt         time.Time     `json:"createdAt"`
 	UpdatedAt         *time.Time    `json:"updatedAt,omitempty"`
 }
+
+type UserReq struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type UserRes struct {
+	Username      string        `json:"username"`
+	Email         string        `json:"email"`
+	Role          RoleType      `json:"role"`
+	AccountStatus AccountStatus `json:"accountStatus"`
+}
