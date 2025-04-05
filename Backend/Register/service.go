@@ -17,7 +17,11 @@ func NewService(repo UserRepo) *Service {
 }
 
 func (s *Service) AddUser(ctx context.Context, user models.UserReq) error {
-	if err := s.repo.AddUser(ctx, &models.User{}); err != nil {
+	if err := s.repo.AddUser(ctx, &models.User{
+		Username: user.Username,
+		Email:    user.Email,
+		Password: user.Password,
+	}); err != nil {
 		return err
 	}
 
@@ -59,8 +63,15 @@ func (s *Service) GetUserById(ctx context.Context, userId int) (models.UserRes, 
 	return userRes, nil
 }
 
-func (s *Service) UpdateUser(ctx context.Context, user models.User) error {
-	if err := s.repo.UpdateUser(ctx, user); err != nil {
+func (s *Service) UpdateUser(ctx context.Context, user models.UpdateUserReq) error {
+	if err := s.repo.UpdateUser(ctx, models.User{
+		Username:    user.Username,
+		Email:       user.Email,
+		Password:    user.Password,
+		FullName:    user.FullName,
+		PhoneNumber: user.PhoneNumber,
+		Address:     user.Address,
+	}); err != nil {
 		return err
 	}
 

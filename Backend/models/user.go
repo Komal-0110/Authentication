@@ -54,3 +54,13 @@ type UserRes struct {
 	Role          RoleType      `json:"role"`
 	AccountStatus AccountStatus `json:"accountStatus"`
 }
+
+type UpdateUserReq struct {
+	ExternalId  string  `json:"ext_id"`
+	Username    string  `json:"userName"`
+	Email       string  `json:"email"`
+	Password    string  `json:"password"`
+	FullName    string  `json:"fullName,omitempty"`
+	PhoneNumber string  `json:"phoneNumber,omitempty"`
+	Address     Address `json:"address,omitempty"`
+}
